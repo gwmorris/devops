@@ -3,9 +3,9 @@ Role Name
 
 Creates the Hygieia dashboard, mostly following the steps as depicted in:
 
-https://www.devopsart.com/2019/09/step-by-step-installation-of-hygieia.html
-https://www.devopsart.com/2019/10/step-by-step-installation-and.html
-https://www.devopsart.com/2019/10/step-by-step-installation-and_14.html
+https://www.devopsart.com/2019/09/step-by-step-installation-of-hygieia.html <br>
+https://www.devopsart.com/2019/10/step-by-step-installation-and.html <br>
+https://www.devopsart.com/2019/10/step-by-step-installation-and_14.html <br>
 
 The mongodb part is downloaded as a container.
 
