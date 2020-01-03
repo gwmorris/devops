@@ -1,0 +1,9 @@
+---
+
+  - name: Hygieia install
+    hosts: localhost
+    roles: 
+      - ../roles/hygieia
+
+    vars:
+      maven_distro: apache-maven-3.5.4
