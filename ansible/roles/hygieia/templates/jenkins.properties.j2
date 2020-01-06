@@ -1,0 +1,52 @@
+auth.expirationTime=1200000
+# Database Name
+dbname=dashboarddb
+
+# Database HostName - default is localhost
+dbhost=localhost
+
+# Database Port - default is 27017
+dbport=27017
+
+# MongoDB replicaset
+dbreplicaset=false
+#dbhostport=[host1:port1,host2:port2,host3:port3]
+
+# Database Username - default is blank
+dbusername=dashboarduser
+
+# Database Password - default is blank
+dbpassword=dbpassword
+
+# Collector schedule (required)
+jenkins.cron=0/5 * * * * *
+
+# The page size
+jenkins.pageSize=1000
+
+# The folder depth - default is 10
+jenkins.folderDepth=10
+
+# Jenkins server (required) - Can provide multiple
+jenkins.servers[0]=http://{{ jenkins_server }}:{{ jenkins_port }}
+
+# If using username/token for API authentication
+# (required for Cloudbees Jenkins Ops Center) For example,
+#jenkins.servers[1]=http://admin:11e275754565f45549201d61afbe51f36c@192.168.56.101:8080
+jenkins.servers[1]=http://{{ token_user }}:{{ token }}@{{ jenkins_server }}:{{ jenkins_port }}
+
+# Another option: If using same username/password Jenkins auth,
+# set username/apiKey to use HTTP Basic Auth (blank=no auth)
+jenkins.usernames[0]={{ token_user }}
+jenkins.apiKeys[0]={{ token }}
+
+# Determines if build console log is collected - defaults to false
+jenkins.saveLog=true
+
+# Search criteria enabled via properties (max search criteria = 2)
+jenkins.searchFields[0]= uaty
+jenkins.searchFields[1]= dev
+
+# Timeout values
+jenkins.connectTimeout=20000
+jenkins.readTimeout=20000
