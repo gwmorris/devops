@@ -7,3 +7,13 @@
 
     vars:
       maven_distro: apache-maven-3.5.4
+
+## Jenkins Collector.  Configure if you have a Jenkins Collector
+
+      jenkins_server: 192.168.56.101
+      jenkins_port: 8080
+      
+  # If using a token for api authentication, enter here
+  
+      token_user: admin
+      token: 11e275754565f45549201d61afbe51f36c
