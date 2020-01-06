@@ -19,10 +19,11 @@
 - name: Build Jenkins Collector
   shell: cd /opt/collectors/hygieia-build-jenkins-collector && /opt/maven/bin/mvn install
   register: result
-#  tags: collectors
+  tags: collectors,build
 
-#- debug: var=result
-#  tags: collectors
+- debug: var=result
+  when: debug
+  tags: collectors,build
 
 - name: Copy jenkins.properties
   template: 

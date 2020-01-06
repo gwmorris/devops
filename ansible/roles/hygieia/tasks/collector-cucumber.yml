@@ -19,10 +19,11 @@
 - name: Build Jenkins Collector
   shell: cd /opt/collectors/hygieia-jenkins-cucumber-collector && /opt/maven/bin/mvn install
   register: result
-  tags: cucumber
+  tags: cucumber,build
 
 - debug: var=result
-  tags: cucumber
+  when: debug
+  tags: cucumber,build
 
 - name: Copy cucumber.properties
   template: 
