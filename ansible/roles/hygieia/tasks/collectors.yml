@@ -1,0 +1,37 @@
+---
+# tasks file for hygeia
+
+
+
+- name: Create Collectors Directory
+  file:
+    path: /opt/collectors
+    state: directory
+    mode: 0755
+  tags: collectors
+
+- name: Git Clone Jenkins Collector
+  git:
+    repo: https://github.com/Hygieia/hygieia-build-jenkins-collector.git
+    dest: /opt/collectors/hygieia-build-jenkins-collector
+  tags: collectors
+
+- name: Build Jenkins Collector
+  shell: cd /opt/collectors/hygieia-build-jenkins-collector && /opt/maven/bin/mvn install
+  register: result
+#  tags: collectors
+
+#- debug: var=result
+#  tags: collectors
+
+- name: Copy jenkins.properties
+  template: 
+    src: jenkins.properties.j2
+    dest: /opt/collectors/hygieia-build-jenkins-collector/target/jenkins.properties
+  tags: collectors
+
+- name: Deploy collector jar
+  shell: nohup java -jar /opt/collectors/hygieia-build-jenkins-collector/target/jenkins-build-collector.jar  --spring.config.name=jenkins --spring.config.location=/opt/collectors/hygieia-build-jenkins-collector/target/jenkins.properties  -Djasypt.encryptor.password=hygieiasecret  > /opt/collectors/hygieia-build-jenkins-collector/nohup.out 2>&1 &
+  tags: collectors
+
+
