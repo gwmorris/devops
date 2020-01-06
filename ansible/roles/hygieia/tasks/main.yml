@@ -4,5 +4,8 @@
 - name: Install Hygieia Dashboard
   include: hygieia.yml
 
-- name: Install Hygieia Collectors
-  include: collectors.yml
+- name: Install Hygieia Jenkins Collector
+  include: collector-jenkins.yml
+
+- name: Install Hygieia Cucumber Collector
+  include: collector-cucumber.yml

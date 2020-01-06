@@ -1,0 +1,37 @@
+---
+# tasks file for hygeia
+
+
+
+- name: Create Collectors Directory if not already there
+  file:
+    path: /opt/collectors
+    state: directory
+    mode: 0755
+  tags: cucumber
+
+- name: Git Clone Jenkins Collector
+  git:
+    repo: https://github.com/Hygieia/hygieia-jenkins-cucumber-collector.git
+    dest: /opt/collectors/hygieia-jenkins-cucumber-collector
+  tags: cucumber
+
+- name: Build Jenkins Collector
+  shell: cd /opt/collectors/hygieia-jenkins-cucumber-collector && /opt/maven/bin/mvn install
+  register: result
+  tags: cucumber
+
+- debug: var=result
+  tags: cucumber
+
+- name: Copy cucumber.properties
+  template: 
+    src: cucumber.properties.j2
+    dest: /opt/collectors/hygieia-jenkins-cucumber-collector/target/cucumber.properties
+  tags: cucumber
+
+- name: Deploy collector jar
+  shell: nohup java -jar /opt/collectors/hygieia-jenkins-cucumber-collector/target/jenkins-cucumber-test-collector.jar  --spring.config.name=cucumber --spring.config.location=/opt/collectors/hygieia-jenkins-cucumber-collector/target/cucumber.properties  -Djasypt.encryptor.password=hygieiasecret  > /opt/collectors/hygieia-build-jenkins-collector/cucumber.out 2>&1 &
+  tags: cucumber
+
+
