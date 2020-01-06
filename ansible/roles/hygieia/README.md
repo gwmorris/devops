@@ -1,17 +1,23 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Creates the Hygieia dashboard, mostly following the steps as depicted in:
+
+https://www.devopsart.com/2019/09/step-by-step-installation-of-hygieia.html <br>
+https://www.devopsart.com/2019/10/step-by-step-installation-and.html <br>
+https://www.devopsart.com/2019/10/step-by-step-installation-and_14.html <br>
+
+The mongodb part is downloaded as a container.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Uses git module and python docker sdk.  The installs for these items are within the playbook.  As a to-do, versions are hard-coded, so perhaps I can bring those versions out as variables so it will be easier to update to more current versions as needed
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+maven_distro: If you want to change the maven distribution
 
 Dependencies
 ------------
