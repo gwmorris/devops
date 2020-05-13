@@ -1,0 +1,78 @@
+---
+
+- name: Install Rancher
+  hosts: all
+  become: yes
+
+  vars:
+    aurora_cluster_endpoint: -- ENDPOINT --
+    aurora_username: -- AURORA_USERNAME --
+    aurora_password: -- AURORA_PASSWORD --
+    aurora_dbname: -- AURORA_DBNAME --
+    helm_binary: helm-v3.2.0-rc.1-linux-amd64.tar.gz
+
+  tasks:
+    - name: install docker
+      yum:
+        name: docker
+        state: present
+
+    - name: start docker
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - shell: >
+        echo {{ aurora_password }} &&
+        curl -sfL https://get.k3s.io | sh -s - server --datastore-endpoint="mysql://{{ aurora_username }}:{{ aurora_password }}@tcp({{ aurora_cluster_endpoint }}:3306)/{{ aurora_dbname }}"
+      register: k8s
+      ignore_errors: true
+
+    - debug: var=k8s
+
+    - name: Download helm
+      shell: curl -o helm.tgz https://get.helm.sh/{{ helm_binary }} && tar xzvf helm.tgz  && cp linux-amd64/helm /usr/local/bin
+
+    - name: Waiting for K3S to Start
+      shell: sleep 5
+
+    - name: Install rancher helm chart
+      shell: /usr/local/bin/helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
+      register: results
+      ignore_errors: true
+
+    - debug: var=results
+
+    - name: Create namespace
+      shell: /usr/local/bin/kubectl create namespace cattle-system
+      register: results
+      ignore_errors: true
+
+    - debug: var=results
+
+    - name: Install Cert Manager
+      copy:
+        src: files/certmanager.sh
+        dest: /tmp/certmanager.sh
+        mode: 0777
+      tags: certmanager
+
+    - name: Install Rancher
+      shell: ./certmanager.sh
+      args:
+        chdir: /tmp/
+      register: results
+      tags: certmanager
+
+    - debug: var=results
+      tags: certmanager
+
+    - name: Verify Cert Manager
+      shell: /usr/local/bin/kubectl get pods --namespace cert-manager
+      register: results
+      tags: certmanager
+      ignore_errors: true
+
+    - debug: var=results
+      tags: certmanager
