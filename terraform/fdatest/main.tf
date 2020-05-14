@@ -5,18 +5,18 @@ provider "aws" {
 }
 
 locals {
-  project       = "fdatest"
+  project       = "gary-demo"
   region        = "us-east-1"
   base_ami      = "ami-0323c3dd2da7fb37d"
-  cost_center   = "011112.003.001.001.001"
+  center        = "HSG"
   owner_contact = "gary.morris@salientcrgt.com"
   common_tags = {
-    Costcenter = local.cost_center
-    Project    = local.project
+    Center  = local.center
+    Project = local.project
   }
 }
 
-module "network" {
+module "network_1" {
   source       = "./modules/network"
   region       = local.region
   project      = "${local.project}"
@@ -37,7 +37,7 @@ output "key_file" {
 }
 
 output "tools_vpc" {
-  value = module.network.vpc
+  value = module.network_1.vpc
 }
 
 # output "master_password" {

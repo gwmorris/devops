@@ -1,7 +1,7 @@
 resource "aws_security_group" "accessdatawebpprod" {
   name        = "AccessData Web PProd"
   description = "necessary ports"
-  vpc_id      = module.network.vpc
+  vpc_id      = module.network_1.vpc
 
   ingress {
     from_port   = 22

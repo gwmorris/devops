@@ -1,9 +1,9 @@
 
 
-resource "aws_instance" "rancher" {
+resource "aws_instance" "instance_1" {
   ami                    = local.base_ami
   instance_type          = "t3.micro"
-  subnet_id              = module.network.public_subnet_a
+  subnet_id              = module.network_1.public_subnet_a
   key_name               = module.keypair.key_name
   vpc_security_group_ids = ["${aws_security_group.accessdatawebdev.id}"]
 
@@ -16,7 +16,7 @@ resource "aws_instance" "rancher" {
   tags = merge(
     local.common_tags,
     map(
-      "Name", "FDA Test Instance 1"
+      "Name", "Test Instance 1"
   ))
 
   # provisioner "local-exec" {
@@ -24,10 +24,10 @@ resource "aws_instance" "rancher" {
   # }
 }
 
-resource "aws_instance" "rancher_2" {
+resource "aws_instance" "instance_2" {
   ami                    = local.base_ami
   instance_type          = "t3.micro"
-  subnet_id              = module.network.public_subnet_a
+  subnet_id              = module.network_1.public_subnet_a
   key_name               = module.keypair.key_name
   vpc_security_group_ids = ["${aws_security_group.accessdatawebdev.id}"]
 
@@ -40,7 +40,7 @@ resource "aws_instance" "rancher_2" {
   tags = merge(
     local.common_tags,
     map(
-      "Name", "FDA Test Instance 2"
+      "Name", "Test Instance 2"
   ))
 
 
@@ -49,17 +49,17 @@ resource "aws_instance" "rancher_2" {
   # }
 }
 
-output "rancher_ip" {
-  value = aws_instance.rancher.public_ip
+output "instance_ip_2" {
+  value = aws_instance.instance_1.public_ip
 }
-output "rancher_ip_2" {
-  value = aws_instance.rancher_2.public_ip
-}
-
-output "rancher_dns" {
-  value = aws_instance.rancher.public_dns
+output "instance_ip_1" {
+  value = aws_instance.instance_2.public_ip
 }
 
-output "rancher_dns_2" {
-  value = aws_instance.rancher_2.public_dns
+output "instance_dns_1" {
+  value = aws_instance.instance_1.public_dns
+}
+
+output "instance_dns_2" {
+  value = aws_instance.instance_2.public_dns
 }
