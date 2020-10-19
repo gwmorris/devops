@@ -39,8 +39,13 @@ Resources:
       - IpProtocol: tcp
         FromPort: 22
         ToPort: 22
-        CidrIp: 10.177.17.10/32
+        CidrIp: 10.177.17.11/32
         Description: Connection to git.fda.gov for deploying code
+      - IpProtocol: tcp
+        FromPort: 5000
+        ToPort: 5000
+        CidrIp: 10.177.96.55/32
+        Description: Connection to Nexus for container update
   IngressRedis:
     Type: AWS::EC2::SecurityGroupIngress
     DependsOn: SGProdExtConsAApp
