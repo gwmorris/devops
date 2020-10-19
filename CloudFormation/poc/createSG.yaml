@@ -1,0 +1,10 @@
+#!/bin/bash
+
+STACK_NAME=SecurityGroups
+FILENAME=security_groups.yaml
+
+
+aws cloudformation ${1}-stack --stack-name $STACK_NAME --template-body file://$FILENAME
+aws cloudformation wait stack-create-complete --stack-name $STACK_NAME
+aws cloudformation describe-stack-resources --stack-name $STACK_NAME
+

@@ -1,0 +1,59 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Security Groups
+Parameters:
+  NetworkStackName:
+    Description: Name of Network Stack
+    Type: String
+    Default: POC-Network
+Resources:
+  SGProdExtConsAApp:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: These are rules specific to Prod Consumption Application A
+      GroupName: FDAGOV-ProdExt-Cons-A-App
+      VpcId:
+        Fn::ImportValue:
+          !Sub "${NetworkStackName}-VPC"
+      Tags:
+        -
+          Key: "Name"
+          Value: "FDAGOV-ProdExt-Cons-A-App"
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 10.0.0.0/8
+        Description: Access to individual consumption nodes from FDA Inside
+      SecurityGroupEgress:
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+        Description: Purge content on Akamai Network
+      - IpProtocol: tcp
+        FromPort: 443
+        ToPort: 443
+        CidrIp: 0.0.0.0/0
+        Description: Purge content on Akamai Network
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: 10.177.17.10/32
+        Description: Connection to git.fda.gov for deploying code
+  IngressRedis:
+    Type: AWS::EC2::SecurityGroupIngress
+    DependsOn: SGProdExtConsAApp
+    Properties:
+      GroupId: !Ref SGProdExtConsAApp
+      IpProtocol: tcp
+      FromPort: 6379
+      ToPort: 6379
+      SourceSecurityGroupId: !Ref SGProdExtConsAApp
+      Description: Inside to Redis
+Outputs:
+  SecurityGroupId:
+    Description: Security Group ID
+    Value: !Ref SGProdExtConsAApp
+    Export:
+      Name: !Sub "${AWS::StackName}-SecurityGroup"

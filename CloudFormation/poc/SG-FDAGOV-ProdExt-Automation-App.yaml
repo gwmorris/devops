@@ -1,0 +1,183 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Security Groups
+Parameters:
+  NetworkStackName:
+    Description: Name of Network Stack
+    Type: String
+    Default: POC-Network
+  ConsumptionAStackName:
+    Description: Name of Consumption A Cloudformation Stack
+    Type: String
+    Default: SG-FDAGOV-ProdExt-Cons-A-App
+  ConsumptionBStackName:
+    Description: Name of Consumption B Cloudformation Stack
+    Type: String
+    Default: SG-FDAGOV-ProdExt-Cons-B-App
+Resources:
+  SGProdExtAutomation:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: These are rules specific to Prod Automation Server
+      GroupName: FDAGOV_ProdExt_Automation
+      VpcId:
+        Fn::ImportValue:
+          !Sub "${NetworkStackName}-VPC"
+      Tags:
+        -
+          Key: "Name"
+          Value: "FDAGOV_ProdExt_Automation"
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 5601
+        ToPort: 5601
+        CidrIp: 10.169.80.187/32
+        Description: ADC Citrix for Kibana
+      - IpProtocol: tcp
+        FromPort: 5601
+        ToPort: 5601
+        CidrIp: 10.169.80.188/32
+        Description: ADC Citrix for Kibana
+      - IpProtocol: tcp
+        FromPort: 5601
+        ToPort: 5601
+        CidrIp: 10.169.81.73/32
+        Description: ADC Citrix for Kibana
+      - IpProtocol: tcp
+        FromPort: 5601
+        ToPort: 5601
+        CidrIp: 10.169.81.75/32
+        Description: ADC Citrix for Kibana
+      - IpProtocol: tcp
+        FromPort: 5601
+        ToPort: 5601
+        CidrIp: 10.169.81.76/32
+        Description: ADC Citrix for Kibana
+      - IpProtocol: tcp
+        FromPort: 5601
+        ToPort: 5601
+        CidrIp: 10.169.81.80/32
+        Description: ADC Citrix for Kibana
+      - IpProtocol: tcp
+        FromPort: 5601
+        ToPort: 5601
+        CidrIp: 10.169.81.81/32
+        Description: ADC Citrix for Kibana
+      - IpProtocol: tcp
+        FromPort: 5601
+        ToPort: 5601
+        CidrIp: 10.169.81.82/32
+        Description: ADC Citrix for Kibana
+      - IpProtocol: tcp
+        FromPort: 5601
+        ToPort: 5601
+        CidrIp: 10.169.81.83/32
+        Description: ADC Citrix for Kibana
+      - IpProtocol: tcp
+        FromPort: 5601
+        ToPort: 5601
+        CidrIp: 10.169.81.84/32
+        Description: ADC Citrix for Kibana
+      - IpProtocol: tcp
+        FromPort: 5601
+        ToPort: 5601
+        CidrIp: 10.169.81.90/32
+        Description: ADC Citrix for Kibana
+      - IpProtocol: tcp
+        FromPort: 5601
+        ToPort: 5601
+        CidrIp: 10.169.81.91/32
+        Description: ADC Citrix for Kibana
+      - IpProtocol: tcp
+        FromPort: 5601
+        ToPort: 5601
+        CidrIp: 10.169.81.92/32
+        Description: ADC Citrix for Kibana
+      - IpProtocol: tcp
+        FromPort: 5601
+        ToPort: 5601
+        CidrIp: 10.169.81.93/32
+        Description: ADC Citrix for Kibana
+      - IpProtocol: tcp
+        FromPort: 5601
+        ToPort: 5601
+        CidrIp: 10.169.81.243/32
+        Description: ADC Citrix for Kibana
+      - IpProtocol: tcp
+        FromPort: 5601
+        ToPort: 5601
+        CidrIp: 10.169.81.244/32
+        Description: ADC Citrix for Kibana
+      - IpProtocol: tcp
+        FromPort: 5601
+        ToPort: 5601
+        CidrIp: 10.169.81.249/32
+        Description: ADC Citrix for Kibana
+      - IpProtocol: tcp
+        FromPort: 5601
+        ToPort: 5601
+        CidrIp: 10.169.81.250/32
+        Description: ADC Citrix for Kibana
+      - IpProtocol: tcp
+        FromPort: 5044
+        ToPort: 5044
+        Description: Consumption A Filebeats
+        SourceSecurityGroupId:
+          Fn::ImportValue:
+            !Sub "${ConsumptionAStackName}-SecurityGroup"
+      - IpProtocol: tcp
+        FromPort: 5044
+        ToPort: 5044
+        Description: Consumption B Filebeats
+        SourceSecurityGroupId:
+          Fn::ImportValue:
+            !Sub "${ConsumptionBStackName}-SecurityGroup"
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: 10.198.96.110/32
+        Description: SSH Jenkins Agent
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: 10.198.96.121/32
+        Description: SSH Jenkins Agent
+      SecurityGroupEgress:
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        Description: SSH Consumption A
+        SourceSecurityGroupId:
+          Fn::ImportValue:
+            !Sub "${ConsumptionAStackName}-SecurityGroup"
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        Description: SSH Consumption B
+        SourceSecurityGroupId:
+          Fn::ImportValue:
+            !Sub "${ConsumptionBStackName}-SecurityGroup"
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        Description: HTTP Consumption A
+        SourceSecurityGroupId:
+          Fn::ImportValue:
+            !Sub "${ConsumptionAStackName}-SecurityGroup"
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        Description: HTTP Consumption B
+        SourceSecurityGroupId:
+          Fn::ImportValue:
+            !Sub "${ConsumptionBStackName}-SecurityGroup"
+      - IpProtocol: tcp
+        FromPort: 5000
+        ToPort: 5000
+        CidrIp: 10.177.81.245/32
+        Description: Automation to Nexus
+      - IpProtocol: tcp
+        FromPort: 8953
+        ToPort: 8953
+        CidrIp: 10.195.52.11/32
+        Description: Automation to Solr
